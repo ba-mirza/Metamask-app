@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+// VARIABLES
+$color-orange: #E75626;
+$font-bebas: 'Bebas Neue', cursive;
+
+// MIXINS
+@mixin custom-grid($num) {
+  display: grid;
+  grid-template-columns: repeat($num, 1fr);
+}
+
+@mixin customizing-font($f-size) {
+  font-family: $font-bebas;
+  font-style: normal;
+  font-weight: 700;
+  font-size: $f-size;
+}
+
+@mixin MGPD() {
+  margin: 0;
+  padding: 0;
+}
+
+// PRE-START
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  background: #171719;
+  color: #fff;
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+input {
+  border: 0;
+  outline: none;
+  background: none;
+}
+
+// DIALOG STYLES
+
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 9;
+
+  .dialog {
+    width: 422px;
+    height: 295px;
+    left: calc(50% - 422px/2);
+    top: calc(50% - 295px/2);
+    position: relative;
+    display: grid;
+    background: #262628;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+
+    h1 {
+      font-family: $font-bebas;
+      letter-spacing: 0.1rem;
+      color: $color-orange;
+    }
+
+    p {
+      align-self: flex-start;
+    }
+
+    button {
+      background: $color-orange;
+      font-family: $font-bebas;
+      color: #fff;
+      font-size: 16px;
+      width: 130px;
+      height: 38px;
+      cursor: pointer;
+      border-radius: 30px;
+      text-align: center;
+      justify-self: center;
+      text-transform: uppercase;
+
+      &:hover {
+        background: #fa7343;
+      }
+    }
+  }
+}
+
+// START APP
+
+.App {
+
+  .second {
+    @include custom-grid(2);
+    margin-top: 7rem;
+  }
+
+  .container {
+    padding: 15px 64px;
+
+    header {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      align-items: center;
+
+      .logo {
+        display: flex;
+        width: 199px;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        background: #5A5A5A;
+        border: 1px dashed #C7C7C7;
+        color: #fff;
+      }
+
+      .connect_mm {
+        width: 160px;
+        font-size: 18px;
+        border-radius: 30px;
+        gap: 10px;
+        padding: 10px;
+        background: $color-orange;
+        color: #fff;
+        cursor: pointer;
+        justify-self: end;
+        font-family: $font-bebas;
+
+        &:hover {
+          background: #fa7343;
+        }
+      }
+    }
+
+    // CONTENT #2
+
+    .content_wrapper {
+      margin-top: 150px;
+
+      .content {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        align-items: center;
+        div {
+          h1 {
+            @include customizing-font(120px);
+            @include MGPD();
+            line-height: 120%;
+            letter-spacing: 0.4rem;
+
+            span {
+              color: #171719;
+              -webkit-text-stroke: 1px #fff;
+            }
+          }
+        }
+
+        .stats {
+          text-align: center;
+          align-self: flex-start;
+
+          h1 {
+            @include customizing-font(32px);
+            margin-top: 14px;
+            line-height: 120%;
+            letter-spacing: 1px;
+            color: #FFFFFF;
+          }
+
+          .numbers {
+            margin-top: 35px;
+            hr {
+              width: 200px;
+              border: 0.3px solid #fff !important;
+            }
+            div {
+              span {
+                @include customizing-font(28px);
+                color: $color-orange;
+              }
+              p {
+                font-weight: 400;
+                @include customizing-font(18px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .round {
+      width: 320px;
+      height: 320px;
+      border-radius: 100%;
+      background: $color-orange;
+      position: absolute;
+      left: 810px;
+      top: 209px;
+    }
+
+    .forms {
+      div {
+        width: 421px;
+        h1 {
+          @include customizing-font(36px);
+          margin: 0;
+          padding: 0;
+          line-height: 120%;
+          letter-spacing: 3px;
+          color: $color-orange;
+        }
+      }
+
+      .inputs {
+        margin-top: 2rem;
+
+        .input_wrapper {
+          margin-top: 1rem;
+          span {
+            @include customizing-font(24px)
+          }
+
+          .input {
+            display: grid;
+            margin-top: 5px;
+            align-items: center;
+            padding-left: 10px;
+            width: 421px;
+            height: 42px;
+            border: 1px solid #FFFFFF;
+            border-radius: 30px;
+
+            input {
+              padding: 5px;
+              color: #fff;
+            }
+          }
+        }
+      }
+
+      button {
+        margin-top: 1.5rem;
+        background: $color-orange;
+        font-family: $font-bebas;
+        color: #fff;
+        font-size: 18px;
+        width: 148px;
+        height: 38px;
+        cursor: pointer;
+        border-radius: 30px;
+        text-align: center;
+
+        &:hover {
+          background: #fa7343;
+        }
+      }
+    }
+    .tableUI {
+      span {
+        @include customizing-font(36px);
+        line-height: 120%;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #FFFFFF;
+      }
+    }
+  }
+}
+
