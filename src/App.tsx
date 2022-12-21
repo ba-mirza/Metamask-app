@@ -1,22 +1,21 @@
 import React from 'react';
 import './App.scss';
-import { motion } from "framer-motion"
 import TableUsers from "./components/TableUsers";
 import {titleOfButton} from "./shared/utils/constants";
-import {customTransition} from "./shared/utils/animateProps";
 import {fetcher} from "./shared/helpers/functions";
-import {Customer, FormValues, MetaData} from "./types/types";
+import {FormValues, MetaData} from "./types/types";
 
 // Metamask Dependency
 import { useEthers } from "@usedapp/core";
 import {SubmitHandler, useForm} from "react-hook-form";
+import Dialog from "./components/Dialog/Dialog";
 
 // Ссылку можно хранить отдельно в environment
 const URL = "https://new-backend.unistory.app/api/data";
 
 function App() {
     const [dialog, setDialog] = React.useState<boolean>(false);
-    const [dataCustomers, setDataCustomers] = React.useState<Customer[]>([]);
+    const [dataCustomers, setDataCustomers] = React.useState<any[]>([]);
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
@@ -25,9 +24,10 @@ function App() {
 
     const onSubmit: SubmitHandler<FormValues> = (values) => {
         const newValue = Object.assign(values, account);
-        console.log(newValue)
+        const {username, email} = values;
+        const newVal = {id: Math.floor(Math.random() * 1000), username, email, address: "4x5646549846"}
         setDataCustomers((prev) => {
-            return [...prev];
+            return [newVal, ...prev];
         })
     }
 
@@ -63,21 +63,7 @@ function App() {
   return (
     <div className="App">
         <div className="container">
-            {dialog && (
-                <motion.div className="overlay"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={customTransition}>
-                    <motion.div className="dialog"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={customTransition}>
-                        <h1>METAMASK EXTENSION</h1>
-                        <p>To work with our application, you have to <br /> install the <span style={{color: "#E75626"}}>Metamask browser extension</span></p>
-                        <button onClick={closeDialog}>Skip this step</button>
-                    </motion.div>
-                </motion.div>
-            )}
+            {dialog && ( <Dialog handleClick={closeDialog} /> )}
             <header>
                 <div className="logo">
                     <div>LOGO</div>

@@ -46,56 +46,7 @@ input {
 
 // DIALOG STYLES
 
-.overlay {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-  background: rgb(0, 0, 0, 0.5);
-  z-index: 12;
 
-  .dialog {
-    width: 422px;
-    height: 295px;
-    left: calc(50% - 422px/2);
-    top: calc(50% - 295px/2);
-    position: relative;
-    display: grid;
-    background: #262628;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-
-    h1 {
-      font-family: $font-bebas;
-      letter-spacing: 0.1rem;
-      color: $color-orange;
-    }
-
-    p {
-      align-self: flex-start;
-    }
-
-    button {
-      background: $color-orange;
-      font-family: $font-bebas;
-      color: #fff;
-      font-size: 16px;
-      width: 130px;
-      height: 38px;
-      cursor: pointer;
-      border-radius: 30px;
-      text-align: center;
-      justify-self: center;
-      text-transform: uppercase;
-
-      &:hover {
-        background: #fa7343;
-      }
-    }
-  }
-}
 
 // START APP
 

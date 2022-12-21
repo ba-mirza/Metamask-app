@@ -2,11 +2,16 @@ import table from './TableUsers.module.scss';
 import {Customer, MetaData} from "../types/types";
 
 interface Props {
-    dataUsers: Customer[] | undefined;
+    dataUsers: Customer[];
 }
 
 function TableUsers(props: Props) {
     const {dataUsers} = props;
+
+    const deleteCustomer = (id: number) => {
+
+    }
+
     return (
         <div className={table.table_wrapper}>
             <table className={table.customers}>
@@ -14,7 +19,7 @@ function TableUsers(props: Props) {
                 <th>EMAIL</th>
                 <th>WALLET</th>
                 {
-                    dataUsers?.map((c: Customer) => (
+                    dataUsers.map((c: Customer) => (
                         <tr key={c.id}>
                             <td>{c.username}</td>
                             <td>{c.email}</td>
