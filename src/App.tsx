@@ -9,6 +9,8 @@ import {FormValues, MetaData} from "./types/types";
 import { useEthers } from "@usedapp/core";
 import {SubmitHandler, useForm} from "react-hook-form";
 import Dialog from "./components/Dialog/Dialog";
+import MetaMaskOnboarding from "@metamask/onboarding";
+declare var window: any
 
 // Ссылку можно хранить отдельно в environment
 const URL = "https://new-backend.unistory.app/api/data";
@@ -19,22 +21,50 @@ function App() {
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
-    const {activateBrowserWallet, account} = useEthers();
+    const [accountWallet, setAccountWallet] = React.useState<string | null>(null);
     const { register, handleSubmit } = useForm<FormValues>();
 
+    const metaMask = new MetaMaskOnboarding();
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            setDialog((prevState) => prevState = true)
+        }, 100)
+    });
+
+    const isMetaMaskInstalled = () => {
+        const { ethereum } = window;
+        return Boolean(ethereum && ethereum.isMetaMask)
+    }
+
+    const fromWallet = async () => {
+        return await window.ethereum.request({method: 'eth_accounts'});
+    }
+
+    const connectWallet = async () => {
+        if(!isMetaMaskInstalled()) {
+            setDialog((prevState) => prevState = true);
+        }
+        await fromWallet()
+            .then((accounts: any) => {
+                if(accounts && accounts.length > 0) {
+                    console.log(accounts);
+                }
+            })
+    }
+
     const onSubmit: SubmitHandler<FormValues> = (values) => {
-        const newValue = Object.assign(values, account);
         const {username, email} = values;
+        const newValue = Object.assign(values, accountWallet);
         const newVal = {id: Math.floor(Math.random() * 1000), username, email, address: "4x5646549846"}
         setDataCustomers((prev) => {
             return [newVal, ...prev];
         })
     }
 
-    if(account) {
+    if(accountWallet) {
         setAccountState((prevState) => prevState = true);
     }
-
 
     React.useEffect(() => {
         fetcher(URL)
@@ -49,12 +79,6 @@ function App() {
 
     }, [])
 
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            setDialog((prevState) => prevState = true)
-        }, 300)
-    });
-
     const closeDialog = () => {
         setDialog((prevState) => prevState = false);
     }
@@ -63,14 +87,14 @@ function App() {
   return (
     <div className="App">
         <div className="container">
-            {dialog && ( <Dialog handleClick={closeDialog} /> )}
+            {dialog && ( <Dialog handleClick={closeDialog} openInstall={() => metaMask.startOnboarding()} /> )}
             <header>
                 <div className="logo">
                     <div>LOGO</div>
                 </div>
                 <button className="connect_mm"
-                        onClick={() => activateBrowserWallet()}>
-                    {accountState ? account : titleOfButton}
+                        onClick={() => connectWallet()}>
+                    {accountState ? accountWallet : titleOfButton}
                 </button>
             </header>
             <div className="planet">
