@@ -4,7 +4,10 @@ $font-bebas: 'Bebas Neue', cursive;
 .table_wrapper {
   margin-top: 1.5rem;
   height: 590px;
-  overflow-scrolling: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
   .customers {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;

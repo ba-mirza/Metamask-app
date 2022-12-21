@@ -4,15 +4,42 @@ import { motion } from "framer-motion"
 import TableUsers from "./components/TableUsers";
 import {titleOfButton} from "./shared/utils/constants";
 import {customTransition} from "./shared/utils/animateProps";
-import useSWR from 'swr';
 import {fetcher} from "./shared/helpers/functions";
-import {MetaData} from "./types/types";
+import {Customer, MetaData} from "./types/types";
 
+// Metamask Dependency
+import {Config, Goerli, Mainnet, useEtherBalance, useEthers} from "@usedapp/core";
+import {getDefaultProvider} from "ethers";
+
+// Ссылку можно хранить отдельно в environment
 const URL = "https://new-backend.unistory.app/api/data";
 
 function App() {
     const [dialog, setDialog] = React.useState<boolean>(false);
-    const {data, error, isLoading} = useSWR<MetaData>(URL, fetcher);
+    const [dataUsers, setDataUsers] = React.useState<Customer[]>([]);
+    const [errorServer, setErrorServer] = React.useState(null);
+    const [skeleton, setSkeleton] = React.useState<boolean>(false);
+    const [accountState, setAccountState] = React.useState<boolean>(false);
+
+    const {activateBrowserWallet, account} = useEthers();
+
+    if(account) {
+        setAccountState((prevState) => prevState = true);
+    }
+
+
+    React.useEffect(() => {
+        fetcher(URL)
+            .then((data: MetaData) => {
+            if(!data) {
+                setSkeleton((prev) => prev = true)
+            }
+            setDataUsers(data.items);
+            setSkeleton((prev) => prev = false)
+        })
+            .catch((error) => setErrorServer(error.json()))
+
+    }, [])
 
     window.addEventListener('load', () => {
         setTimeout(() => {
@@ -23,6 +50,7 @@ function App() {
     const closeDialog = () => {
         setDialog((prevState) => prevState = false);
     }
+
 
   return (
     <div className="App">
@@ -46,8 +74,9 @@ function App() {
                 <div className="logo">
                     <div>LOGO</div>
                 </div>
-                <button className="connect_mm">
-                    {titleOfButton}
+                <button className="connect_mm"
+                        onClick={() => activateBrowserWallet()}>
+                    {accountState ? account : titleOfButton}
                 </button>
             </header>
             <div className="planet">
@@ -110,13 +139,13 @@ function App() {
                         </div>
                     </div>
                 </div>
-                <button className="">GET EARLY ACCESS</button>
+                <button>GET EARLY ACCESS</button>
             </div>
             <div className="tableUI">
-                {isLoading && (<div>Loading...</div>)}
-                {error && (<div>Something went wrong...</div>)}
+                {skeleton && (<div>Loading...</div>)}
+                {errorServer && (<div>Something went wrong...</div>)}
                 <span>Participation listing (enable only for participants)</span>
-                <TableUsers data={data}/>
+                <TableUsers dataUsers={dataUsers}/>
             </div>
         </div>
     </div>
