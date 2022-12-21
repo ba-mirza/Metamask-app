@@ -53,7 +53,7 @@ input {
   left: 0;
   top: 0;
   background: rgb(0, 0, 0, 0.5);
-  z-index: 9;
+  z-index: 12;
 
   .dialog {
     width: 422px;
@@ -153,6 +153,7 @@ input {
         grid-template-columns: 3fr 1fr;
         align-items: center;
         div {
+          z-index: 10;
           h1 {
             @include customizing-font(120px);
             @include MGPD();
@@ -199,14 +200,35 @@ input {
       }
     }
 
-    .round {
-      width: 320px;
-      height: 320px;
-      border-radius: 100%;
-      background: $color-orange;
-      position: absolute;
-      left: 810px;
-      top: 209px;
+    .planet {
+      .round {
+        width: 320px;
+        height: 320px;
+        border-radius: 100%;
+        background: $color-orange;
+        position: absolute;
+        left: 810px;
+        top: 200px;
+
+      }
+
+      // TODO: REFACTOR
+      //.back {
+      //  width: 466px;
+      //  height: 486px;
+      //  left: 745px;
+      //  top: 119px;
+      //}
+
+      //.line1 {
+      //
+      //}
+      //
+      //.line2 {
+      //  background: none;
+      //  border-radius: 100%;
+      //  border: 1px dashed blue;
+      //}
     }
 
     .forms {

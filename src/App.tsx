@@ -8,15 +8,14 @@ import {fetcher} from "./shared/helpers/functions";
 import {Customer, MetaData} from "./types/types";
 
 // Metamask Dependency
-import {Config, Goerli, Mainnet, useEtherBalance, useEthers} from "@usedapp/core";
-import {getDefaultProvider} from "ethers";
+import { useEthers } from "@usedapp/core";
 
 // Ссылку можно хранить отдельно в environment
 const URL = "https://new-backend.unistory.app/api/data";
 
 function App() {
     const [dialog, setDialog] = React.useState<boolean>(false);
-    const [dataUsers, setDataUsers] = React.useState<Customer[]>([]);
+    const [dataCustomers, setDataCustomers] = React.useState<Customer[]>([]);
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
@@ -27,6 +26,12 @@ function App() {
         setAccountState((prevState) => prevState = true);
     }
 
+    const addCustomer = (customer: Customer) => {
+        setDataCustomers((prev) => {
+            return [...prev, customer];
+        })
+    }
+
 
     React.useEffect(() => {
         fetcher(URL)
@@ -34,7 +39,7 @@ function App() {
             if(!data) {
                 setSkeleton((prev) => prev = true)
             }
-            setDataUsers(data.items);
+            setDataCustomers(data.items);
             setSkeleton((prev) => prev = false)
         })
             .catch((error) => setErrorServer(error.json()))
@@ -80,11 +85,9 @@ function App() {
                 </button>
             </header>
             <div className="planet">
-                {/*<img src="" alt=""/>*/}
-                <motion.div className="round"
-                            animate={{ rotate: 180 }}
-                            transition={{ type: "spring", duration: 0.8 }}>
-                </motion.div>
+                {/*<img className="round back" src="/background-planet.png" alt="back-planet"/>*/}
+                <img className="round" src="/planet.png" alt="planet"/>
+                {/*<div className="round textMask"></div>*/}
             </div>
             <div className="content_wrapper">
                 <div className="content">
@@ -139,13 +142,13 @@ function App() {
                         </div>
                     </div>
                 </div>
-                <button>GET EARLY ACCESS</button>
+                <button onClick={addCustomer}>GET EARLY ACCESS</button>
             </div>
             <div className="tableUI">
                 {skeleton && (<div>Loading...</div>)}
                 {errorServer && (<div>Something went wrong...</div>)}
                 <span>Participation listing (enable only for participants)</span>
-                <TableUsers dataUsers={dataUsers}/>
+                <TableUsers dataUsers={dataCustomers}/>
             </div>
         </div>
     </div>
