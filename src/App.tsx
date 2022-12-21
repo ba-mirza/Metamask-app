@@ -5,10 +5,11 @@ import TableUsers from "./components/TableUsers";
 import {titleOfButton} from "./shared/utils/constants";
 import {customTransition} from "./shared/utils/animateProps";
 import {fetcher} from "./shared/helpers/functions";
-import {Customer, MetaData} from "./types/types";
+import {Customer, FormValues, MetaData} from "./types/types";
 
 // Metamask Dependency
 import { useEthers } from "@usedapp/core";
+import {SubmitHandler, useForm} from "react-hook-form";
 
 // Ссылку можно хранить отдельно в environment
 const URL = "https://new-backend.unistory.app/api/data";
@@ -19,17 +20,19 @@ function App() {
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
-
     const {activateBrowserWallet, account} = useEthers();
+    const { register, handleSubmit } = useForm<FormValues>();
+
+    const onSubmit: SubmitHandler<FormValues> = (values) => {
+        const newValue = Object.assign(values, account);
+        console.log(newValue)
+        setDataCustomers((prev) => {
+            return [...prev];
+        })
+    }
 
     if(account) {
         setAccountState((prevState) => prevState = true);
-    }
-
-    const addCustomer = (customer: Customer) => {
-        setDataCustomers((prev) => {
-            return [...prev, customer];
-        })
     }
 
 
@@ -129,20 +132,28 @@ function App() {
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                 </div>
                 <div className="inputs">
-                    <div className="input_wrapper">
-                        <span>NAME</span>
-                        <div className="input">
-                            <input type="text" required placeholder="We will display your name in participation list"/>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="input_wrapper">
+                            <span>NAME</span>
+                            <div className="input">
+                                <input
+                                    {...register("username")}
+                                    required
+                                    placeholder="We will display your name in participation list"/>
+                            </div>
                         </div>
-                    </div>
-                    <div className="input_wrapper">
-                        <span>EMAIL</span>
-                        <div className="input">
-                            <input type="email" required placeholder="We will display your name in participation list"/>
+                        <div className="input_wrapper">
+                            <span>EMAIL</span>
+                            <div className="input">
+                                <input
+                                    {...register("email")}
+                                    required
+                                    placeholder="We will display your name in participation list"/>
+                            </div>
                         </div>
-                    </div>
+                        <input className="access" type="submit" value="GET EARLY ACCESS"/>
+                    </form>
                 </div>
-                <button onClick={addCustomer}>GET EARLY ACCESS</button>
             </div>
             <div className="tableUI">
                 {skeleton && (<div>Loading...</div>)}

@@ -15,3 +15,8 @@ export interface Customer {
     email: string;
     address: string;
 }
+
+export type FormValues = {
+    username: string;
+    email: string;
+};
