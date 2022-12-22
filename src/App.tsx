@@ -20,6 +20,7 @@ function App() {
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [wallet, setWallet] = React.useState<string | undefined>("");
+    const {account, activateBrowserWallet} = useEthers();
     const { register, handleSubmit } = useForm<FormValues>();
 
     const metaMask = new MetaMaskOnboarding();
@@ -38,7 +39,7 @@ function App() {
             id: Math.floor(Math.random() * 1000),
             username,
             email,
-            address: wallet
+            address: account
         }
         setDataCustomers((prev) => {
             return [newCustomer, ...prev];
@@ -72,16 +73,24 @@ function App() {
         setDialog((prevState) => prevState = state);
     }
 
-    const handleWallet = (wallet: string | undefined) => {
-        setWallet(wallet);
+    const isMetaMaskInstalled = () => {
+        const { ethereum } = window;
+        return Boolean(ethereum && ethereum.isMetaMask)
     }
 
+    const connectWallet = () => {
+        if(!isMetaMaskInstalled()) {
+            setDialog(true);
+        } else {
+            activateBrowserWallet();
+        }
+    }
 
   return (
     <div className="App">
         <div className="container">
             {dialog && ( <Dialog handleClick={toggleDialog} openInstall={() => metaMask.startOnboarding()} /> )}
-            <Header returnWallet={handleWallet} setDialog={toggleDialog} />
+            <Header account={account} connectWallet={connectWallet} />
             <div className="planet">
                 <img className="round" src="/planet.png" alt="planet"/>
                 {/*<div className="round textMask"></div>*/}

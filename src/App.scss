@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-
-// VARIABLES
-$color-orange: #E75626;
-$font-bebas: 'Bebas Neue', cursive;
+@import "src/shared/utils/styles/variables";
 
 // MIXINS
 @mixin custom-grid($num) {
