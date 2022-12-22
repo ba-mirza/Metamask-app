@@ -6,22 +6,22 @@ import reportWebVitals from './reportWebVitals';
 
 // Metamask Dependency
 import { Mainnet, DAppProvider, Config, Goerli } from '@usedapp/core'
-import { getDefaultProvider } from 'ethers'
 
-// TODO: (HAS BROKEN) FIX IT
-// const config: Config = {
-//     readOnlyChainId: Mainnet.chainId,
-//     readOnlyUrls: {
-//         [Mainnet.chainId]: getDefaultProvider('mainnet'),
-//     },
-// }
+const config: Config = {
+    readOnlyChainId: Mainnet.chainId,
+    readOnlyUrls: {
+        [Mainnet.chainId]: "https://mainnet.infura.io/v3/978151aee2714956959a6a3c56acd099",
+    },
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <App />
+        <DAppProvider config={config}>
+            <App />
+        </DAppProvider>
     </React.StrictMode>
 );
 

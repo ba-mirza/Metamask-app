@@ -21,48 +21,43 @@ function App() {
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
-    const [accountWallet, setAccountWallet] = React.useState<string | null>(null);
+    const {account, activateBrowserWallet} = useEthers();
     const { register, handleSubmit } = useForm<FormValues>();
 
     const metaMask = new MetaMaskOnboarding();
 
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            setDialog((prevState) => prevState = true)
-        }, 100)
-    });
+    React.useEffect(() => {
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                setDialog((prevState) => prevState = true)
+            }, 100)
+        });
+    })
 
     const isMetaMaskInstalled = () => {
         const { ethereum } = window;
         return Boolean(ethereum && ethereum.isMetaMask)
     }
 
-    const fromWallet = async () => {
-        return await window.ethereum.request({method: 'eth_accounts'});
-    }
 
-    const connectWallet = async () => {
+    const connectWallet = () => {
         if(!isMetaMaskInstalled()) {
             setDialog((prevState) => prevState = true);
+        } else {
+            activateBrowserWallet()
         }
-        await fromWallet()
-            .then((accounts: any) => {
-                if(accounts && accounts.length > 0) {
-                    console.log(accounts);
-                }
-            })
     }
 
     const onSubmit: SubmitHandler<FormValues> = (values) => {
         const {username, email} = values;
-        const newValue = Object.assign(values, accountWallet);
+        const newValue = Object.assign(values, account);
         const newVal = {id: Math.floor(Math.random() * 1000), username, email, address: "4x5646549846"}
         setDataCustomers((prev) => {
             return [newVal, ...prev];
         })
     }
 
-    if(accountWallet) {
+    if(account) {
         setAccountState((prevState) => prevState = true);
     }
 
@@ -93,8 +88,8 @@ function App() {
                     <div>LOGO</div>
                 </div>
                 <button className="connect_mm"
-                        onClick={() => connectWallet()}>
-                    {accountState ? accountWallet : titleOfButton}
+                        onClick={connectWallet}>
+                    {titleOfButton}
                 </button>
             </header>
             <div className="planet">
