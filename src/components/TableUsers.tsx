@@ -1,4 +1,4 @@
-import table from './TableUsers.module.scss';
+import scss from './TableUsers.module.scss';
 import {Customer, MetaData} from "../types/types";
 import {Link} from "react-router-dom";
 
@@ -15,8 +15,8 @@ function TableUsers(props: Props) {
     }
 
     return (
-        <div className={table.table_wrapper}>
-            <table className={table.customers}>
+        <div className={scss.table_wrapper}>
+            <table className={scss.customers}>
                 <th>NAME</th>
                 <th>EMAIL</th>
                 <th>WALLET</th>

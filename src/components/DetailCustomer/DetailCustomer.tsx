@@ -10,8 +10,6 @@ function DetailCustomer() {
     const {id} = useParams()
     const [customer, setCustomer] = React.useState<Customer>();
 
-    console.log(customer);
-
     React.useEffect(() => {
         fetcher(env.url + `/id/${id}`).then((c: Customer) => setCustomer(c));
     }, [])

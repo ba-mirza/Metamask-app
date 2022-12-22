@@ -19,7 +19,6 @@ function App() {
     const [dataCustomers, setDataCustomers] = React.useState<Customer[]>([]);
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
-    const [wallet, setWallet] = React.useState<string | undefined>("");
     const {account, activateBrowserWallet} = useEthers();
     const { register, handleSubmit } = useForm<FormValues>();
 
@@ -31,7 +30,7 @@ function App() {
                 setDialog((prevState) => prevState = true)
             }, 100)
         });
-    })
+    }, [])
 
     const onSubmit: SubmitHandler<FormValues> = (values) => {
         const {username, email} = values;
@@ -48,7 +47,7 @@ function App() {
 
     const deleteCustomer = (id: number) => {
         const newDataCustomers = dataCustomers.filter((c: Customer) => c.id !== id);
-        setDataCustomers((prev) => (newDataCustomers));
+        setDataCustomers(newDataCustomers);
     }
 
     // TODO: RE-RENDER MOMENT FIXED
@@ -60,17 +59,17 @@ function App() {
         fetcher(env.url)
             .then((data: MetaData) => {
             if(!data) {
-                setSkeleton((prev) => prev = true)
+                setSkeleton(true)
             }
             setDataCustomers(data.items);
-            setSkeleton((prev) => prev = false)
+            setSkeleton(false);
         })
             .catch((error) => setErrorServer(error.json()))
 
     }, [])
 
-    const toggleDialog = (state: boolean) => {
-        setDialog((prevState) => prevState = state);
+    const closeDialog = () => {
+        setDialog(false);
     }
 
     const isMetaMaskInstalled = () => {
@@ -89,7 +88,7 @@ function App() {
   return (
     <div className="App">
         <div className="container">
-            {dialog && ( <Dialog handleClick={toggleDialog} openInstall={() => metaMask.startOnboarding()} /> )}
+            {dialog && ( <Dialog closeDialog={closeDialog} openInstall={() => metaMask.startOnboarding()} /> )}
             <Header account={account} connectWallet={connectWallet} />
             <div className="planet">
                 <img className="round" src="/planet.png" alt="planet"/>
