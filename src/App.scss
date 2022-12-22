@@ -87,6 +87,8 @@ input {
         cursor: pointer;
         justify-self: end;
         font-family: $font-bebas;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:hover {
           background: #fa7343;

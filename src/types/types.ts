@@ -13,7 +13,7 @@ export interface Customer {
     id: number;
     username: string;
     email: string;
-    address: string;
+    address: string | undefined;
 }
 
 export type FormValues = {

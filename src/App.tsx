@@ -3,7 +3,7 @@ import './App.scss';
 import TableUsers from "./components/TableUsers";
 import {titleOfButton} from "./shared/utils/constants";
 import {fetcher} from "./shared/helpers/functions";
-import {FormValues, MetaData} from "./types/types";
+import {Customer, FormValues, MetaData} from "./types/types";
 
 // Metamask Dependency
 import { useEthers } from "@usedapp/core";
@@ -17,7 +17,7 @@ const URL = "https://new-backend.unistory.app/api/data";
 
 function App() {
     const [dialog, setDialog] = React.useState<boolean>(false);
-    const [dataCustomers, setDataCustomers] = React.useState<any[]>([]);
+    const [dataCustomers, setDataCustomers] = React.useState<Customer[]>([]);
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
     const [accountState, setAccountState] = React.useState<boolean>(false);
@@ -50,16 +50,26 @@ function App() {
 
     const onSubmit: SubmitHandler<FormValues> = (values) => {
         const {username, email} = values;
-        const newValue = Object.assign(values, account);
-        const newVal = {id: Math.floor(Math.random() * 1000), username, email, address: "4x5646549846"}
+        const newCustomer: Customer = {
+            id: Math.floor(Math.random() * 1000),
+            username,
+            email,
+            address: account
+        }
         setDataCustomers((prev) => {
-            return [newVal, ...prev];
-        })
+            return [newCustomer, ...prev];
+        });
     }
 
-    if(account) {
-        setAccountState((prevState) => prevState = true);
+    const deleteCustomer = (id: number) => {
+        const newDataCustomers = dataCustomers.filter((c: Customer) => c.id !== id);
+        setDataCustomers((prev) => (newDataCustomers));
     }
+
+    // TODO: RE-RENDER MOMENTS FIXED
+    // if(account) {
+    //     setAccountState((prevState) => prevState = true);
+    // }
 
     React.useEffect(() => {
         fetcher(URL)
@@ -89,7 +99,7 @@ function App() {
                 </div>
                 <button className="connect_mm"
                         onClick={connectWallet}>
-                    {titleOfButton}
+                    {account ? account : titleOfButton}
                 </button>
             </header>
             <div className="planet">
@@ -164,7 +174,7 @@ function App() {
                 {skeleton && (<div>Loading...</div>)}
                 {errorServer && (<div>Something went wrong...</div>)}
                 <span>Participation listing (enable only for participants)</span>
-                <TableUsers dataUsers={dataCustomers}/>
+                <TableUsers deleteCustomer={deleteCustomer} dataUsers={dataCustomers}/>
             </div>
         </div>
     </div>

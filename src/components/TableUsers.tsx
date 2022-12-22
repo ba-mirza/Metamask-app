@@ -3,13 +3,14 @@ import {Customer, MetaData} from "../types/types";
 
 interface Props {
     dataUsers: Customer[];
+    deleteCustomer: (id: number) => void;
 }
 
 function TableUsers(props: Props) {
-    const {dataUsers} = props;
+    const {dataUsers, deleteCustomer} = props;
 
-    const deleteCustomer = (id: number) => {
-
+    const _deleteCustomer = (id: number) => {
+        deleteCustomer(id);
     }
 
     return (
@@ -24,7 +25,7 @@ function TableUsers(props: Props) {
                             <td>{c.username}</td>
                             <td>{c.email}</td>
                             <td>{c.address}</td>
-                            <td>x</td>
+                            <td onClick={() => _deleteCustomer(c.id)}>x</td>
                         </tr>
                     ))
                 }
