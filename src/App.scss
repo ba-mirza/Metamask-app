@@ -44,60 +44,15 @@ input {
   background: none;
 }
 
-// DIALOG STYLES
-
-
-
 // START APP
-
 .App {
-
   .second {
     @include custom-grid(2);
     margin-top: 7rem;
   }
-
   .container {
     padding: 15px 64px;
-
-    header {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      align-items: center;
-
-      .logo {
-        display: flex;
-        width: 199px;
-        align-items: center;
-        justify-content: center;
-        height: 44px;
-        background: #5A5A5A;
-        border: 1px dashed #C7C7C7;
-        color: #fff;
-      }
-
-      .connect_mm {
-        width: 160px;
-        font-size: 18px;
-        border-radius: 30px;
-        gap: 10px;
-        padding: 10px;
-        background: $color-orange;
-        color: #fff;
-        cursor: pointer;
-        justify-self: end;
-        font-family: $font-bebas;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        &:hover {
-          background: #fa7343;
-        }
-      }
-    }
-
     // CONTENT #2
-
     .content_wrapper {
       margin-top: 150px;
 

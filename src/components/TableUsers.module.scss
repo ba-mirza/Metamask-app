@@ -1,6 +1,13 @@
 $color-orange: #E75626;
 $font-bebas: 'Bebas Neue', cursive;
 
+a:-webkit-any-link {
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+}
+
 .table_wrapper {
   margin-top: 1.5rem;
   height: 620px;

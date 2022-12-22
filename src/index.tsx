@@ -5,14 +5,33 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // Metamask Dependency
-import { Mainnet, DAppProvider, Config, Goerli } from '@usedapp/core'
+import { Mainnet, DAppProvider, Config } from '@usedapp/core'
+
+// React Router Dom Dependency
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import DetailCustomer from "./components/DetailCustomer/DetailCustomer";
+import {env} from "./environments/environments";
 
 const config: Config = {
     readOnlyChainId: Mainnet.chainId,
     readOnlyUrls: {
-        [Mainnet.chainId]: "https://mainnet.infura.io/v3/978151aee2714956959a6a3c56acd099",
+        [Mainnet.chainId]: env.mainnet
     },
 }
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App />,
+    },
+    {
+        path: "/detail/:id",
+        element: <DetailCustomer />
+    }
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,7 +39,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <DAppProvider config={config}>
-            <App />
+            <RouterProvider router={router} />
         </DAppProvider>
     </React.StrictMode>
 );

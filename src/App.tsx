@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.scss';
 import TableUsers from "./components/TableUsers";
-import {titleOfButton} from "./shared/utils/constants";
 import {fetcher} from "./shared/helpers/functions";
 import {Customer, FormValues, MetaData} from "./types/types";
 
@@ -10,18 +9,17 @@ import { useEthers } from "@usedapp/core";
 import {SubmitHandler, useForm} from "react-hook-form";
 import Dialog from "./components/Dialog/Dialog";
 import MetaMaskOnboarding from "@metamask/onboarding";
-declare var window: any
+import Header from "./components/Header/Header";
+import {env} from "./environments/environments";
 
-// Ссылку можно хранить отдельно в environment
-const URL = "https://new-backend.unistory.app/api/data";
+declare var window: any
 
 function App() {
     const [dialog, setDialog] = React.useState<boolean>(false);
     const [dataCustomers, setDataCustomers] = React.useState<Customer[]>([]);
     const [errorServer, setErrorServer] = React.useState(null);
     const [skeleton, setSkeleton] = React.useState<boolean>(false);
-    const [accountState, setAccountState] = React.useState<boolean>(false);
-    const {account, activateBrowserWallet} = useEthers();
+    const [wallet, setWallet] = React.useState<string | undefined>("");
     const { register, handleSubmit } = useForm<FormValues>();
 
     const metaMask = new MetaMaskOnboarding();
@@ -34,27 +32,13 @@ function App() {
         });
     })
 
-    const isMetaMaskInstalled = () => {
-        const { ethereum } = window;
-        return Boolean(ethereum && ethereum.isMetaMask)
-    }
-
-
-    const connectWallet = () => {
-        if(!isMetaMaskInstalled()) {
-            setDialog((prevState) => prevState = true);
-        } else {
-            activateBrowserWallet()
-        }
-    }
-
     const onSubmit: SubmitHandler<FormValues> = (values) => {
         const {username, email} = values;
         const newCustomer: Customer = {
             id: Math.floor(Math.random() * 1000),
             username,
             email,
-            address: account
+            address: wallet
         }
         setDataCustomers((prev) => {
             return [newCustomer, ...prev];
@@ -66,13 +50,13 @@ function App() {
         setDataCustomers((prev) => (newDataCustomers));
     }
 
-    // TODO: RE-RENDER MOMENTS FIXED
+    // TODO: RE-RENDER MOMENT FIXED
     // if(account) {
     //     setAccountState((prevState) => prevState = true);
     // }
 
     React.useEffect(() => {
-        fetcher(URL)
+        fetcher(env.url)
             .then((data: MetaData) => {
             if(!data) {
                 setSkeleton((prev) => prev = true)
@@ -84,26 +68,21 @@ function App() {
 
     }, [])
 
-    const closeDialog = () => {
-        setDialog((prevState) => prevState = false);
+    const toggleDialog = (state: boolean) => {
+        setDialog((prevState) => prevState = state);
+    }
+
+    const handleWallet = (wallet: string | undefined) => {
+        setWallet(wallet);
     }
 
 
   return (
     <div className="App">
         <div className="container">
-            {dialog && ( <Dialog handleClick={closeDialog} openInstall={() => metaMask.startOnboarding()} /> )}
-            <header>
-                <div className="logo">
-                    <div>LOGO</div>
-                </div>
-                <button className="connect_mm"
-                        onClick={connectWallet}>
-                    {account ? account : titleOfButton}
-                </button>
-            </header>
+            {dialog && ( <Dialog handleClick={toggleDialog} openInstall={() => metaMask.startOnboarding()} /> )}
+            <Header returnWallet={handleWallet} setDialog={toggleDialog} />
             <div className="planet">
-                {/*<img className="round back" src="/background-planet.png" alt="back-planet"/>*/}
                 <img className="round" src="/planet.png" alt="planet"/>
                 {/*<div className="round textMask"></div>*/}
             </div>

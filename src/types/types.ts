@@ -20,3 +20,8 @@ export type FormValues = {
     username: string;
     email: string;
 };
+
+export interface Environments {
+    url: string;
+    mainnet: string;
+}

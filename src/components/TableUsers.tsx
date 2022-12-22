@@ -1,5 +1,6 @@
 import table from './TableUsers.module.scss';
 import {Customer, MetaData} from "../types/types";
+import {Link} from "react-router-dom";
 
 interface Props {
     dataUsers: Customer[];
@@ -22,7 +23,7 @@ function TableUsers(props: Props) {
                 {
                     dataUsers.map((c: Customer) => (
                         <tr key={c.id}>
-                            <td>{c.username}</td>
+                            <Link to={`/detail/${c.id}`}><td>{c.username}</td></Link>
                             <td>{c.email}</td>
                             <td>{c.address}</td>
                             <td onClick={() => _deleteCustomer(c.id)}>x</td>
